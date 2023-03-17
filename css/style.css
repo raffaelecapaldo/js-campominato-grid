@@ -4,7 +4,7 @@ header {
 
 main {
     height: calc(100vh - 140px);
-    background-color: blue;
+    overflow-y: auto;
 }
 
 footer {
@@ -21,6 +21,8 @@ footer {
     width: 100%;
 }
 
-.right {
-    
+.grid {
+    width: 500px;
+    height: 500px;
+    background-color: red;
 }
