@@ -5,7 +5,7 @@ header {
 main {
     height: calc(100vh - 140px);
     overflow-y: auto;
-    background-color: grey;
+    background-color: #e4ca41;
 }
 
 footer {
@@ -34,4 +34,14 @@ footer {
     display:flex;
     align-items: center;
     justify-content: center;
+    cursor:crosshair;
+}
+
+.checked {
+    background-color: red;
+    color:white;
+}
+
+.unchecked {
+    background-color:#215068;
 }
