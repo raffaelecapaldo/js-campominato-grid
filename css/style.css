@@ -5,6 +5,7 @@ header {
 main {
     height: calc(100vh - 140px);
     overflow-y: auto;
+    background-color: grey;
 }
 
 footer {
@@ -22,9 +23,8 @@ footer {
 }
 
 .grid {
-    width: 500px;
-    height: 500px;
-    background-color: red;
+    width: 700px;
+    height: 700px;
 }
 
 .square {
