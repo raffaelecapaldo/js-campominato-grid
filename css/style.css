@@ -38,6 +38,11 @@ footer {
 }
 
 .checked {
+    background-color: grey;
+    color:white;
+}
+
+.bomb {
     background-color: red;
     color:white;
 }

@@ -12,17 +12,22 @@ Aggiungere una select accanto al bottone di generazione, che fornisca una scelta
 const playButton = document.getElementById("play-button");
 const difficultySelector = document.querySelector("select");
 const grid = document.querySelector(".grid");
+const infoText = document.getElementById("info-text");
 playButton.addEventListener("click", play);
 
+
 function play() {
+    infoText.classList.add("d-none");
     grid.innerHTML = "";//Svuota griglia se è stata già fatta una partita
     let squareNumbers = setMode(difficultySelector.value);//Prendi info su quanti cicli fare
     let squarePerRow = Math.sqrt(squareNumbers);// Radice quadrata per sapere quanti quadrati inserire per riga
-    drawGrid(squareNumbers, squarePerRow);//Disegna griglia
-    const square = document.getElementsByClassName("square");
+    const NUM_BOMBS = 16;
+    const bombs = generateBombs(NUM_BOMBS, squareNumbers);
+    drawGrid(squareNumbers, squarePerRow, bombs);//Disegna griglia
 
 
 }
+
 
 function setMode(difficulty) {//Imposta difficoltà
     let squareNumbers;
@@ -47,18 +52,48 @@ function drawSquare(index, numSquares) {
     return square;//Ritorna il quadratino 
 }
 
-function drawGrid(squareNumbers, squarePerRow) {//Cicla la creazione degli square in base a quanti ne servono
+function drawGrid(squareNumbers, squarePerRow, bombs) {//Cicla la creazione degli square in base a quanti ne servono
     for (let i = 1; i <= squareNumbers; i++) {
         const square = drawSquare(i, squarePerRow);
+        if (bombs.includes(parseInt(square.innerText))) {//Se nelle bombe c'è il n segnato dal valore del suo testo
+            square.addEventListener("click", checkBomb);//Aggiunge l'event listener per le bombe su ogni quadratino
+        }
+        else {
+            square.addEventListener("click", checkSquare);//Altrimenti aggiunge il check normale
+ }
         grid.appendChild(square);
-        square.addEventListener("click", checkSquare);//Aggiunge l'event listener su ogni quadratino
 
 
     }
+
 }
 
 function checkSquare() {
+
+
     this.classList.remove("unchecked");//Toglie unchecked
     this.classList.add("checked");//Mette checked
     console.log("Hai cliccato la cella numero: " + this.innerText)//Restituisce in console log il suo n 
 }
+
+function checkBomb() {
+    this.classList.remove("unchecked");//Toglie unchecked
+    this.classList.add("bomb");//Mette checked
+    console.log("Hai cliccato la bomba numero: " + this.innerText)//Restituisce in console log il suo n 
+}
+
+
+
+
+function generateBombs(bombsNum, squareNumbers) {
+    const bombs = [];
+    while (bombs.length < bombsNum) {
+        const bomb = getRndNumber(1, squareNumbers);
+        if (!bombs.includes(bomb)) {
+            bombs.push(bomb);
+        }
+    }
+    return bombs;
+}
+
+
