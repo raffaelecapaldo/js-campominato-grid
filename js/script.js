@@ -11,10 +11,15 @@ Aggiungere una select accanto al bottone di generazione, che fornisca una scelta
 
 const playButton = document.getElementById("play-button");
 const difficultySelector = document.querySelector("select");
+const grid = document.querySelector(".grid");
+playButton.addEventListener("click", play);
 
 function play() {
-    let squareNumbers = setMode(difficultySelector.value);
-    let squarePerRow = Math.sqrt(squareNumbers);
+    grid.innerHTML = "";//Svuota griglia se è stata già fatta una partita
+    let squareNumbers = setMode(difficultySelector.value);//Prendi info su quanti cicli fare
+    let squarePerRow = Math.sqrt(squareNumbers);// Radice quadrata per sapere quanti quadrati inserire per riga
+    drawGrid(squareNumbers, squarePerRow);
+   
 
 
 }
@@ -31,12 +36,21 @@ function setMode(difficulty) {//Imposta difficoltà
 
 
     }
-} 
+}
 
-function drawSquare (index, numSquares) {
+function drawSquare(index, numSquares) {
     const square = document.createElement("div");//Crea un div
     square.classList.add("square");//Assegna la classe square
     square.style.width = `calc(100% / ${numSquares})`;//Dagli larghezza 100% / numero di quadratini che saranno creati al termine del ciclo
     square.style.height = square.style.width;//La larghezza è uguale all'altezza (quadrato)
+    square.innerText = `${index}`;
     return square;//Ritorna il quadratino 
+}
+
+function drawGrid (squareNumbers, squarePerRow) {//Cicla la creazione degli square in base a quanti ne servono
+    for (let i = 1; i <= squareNumbers; i++) {
+        const square = drawSquare(i, squarePerRow);
+        grid.appendChild(square);
+
+    }
 }
