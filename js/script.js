@@ -19,9 +19,9 @@ function play() {
 
 }
 
-function setMode(difficulty) {
+function setMode(difficulty) {//Imposta difficoltà
     let squareNumbers;
-    switch (difficulty) {
+    switch (difficulty) {//Dipendentemente dal valore di difficoltà che riceve, ritornerà un int differente di cicli da fare
         case "easy":
             return squareNumbers = 100;
         case "medium":
@@ -32,3 +32,11 @@ function setMode(difficulty) {
 
     }
 } 
+
+function drawSquare (index, numSquares) {
+    const square = document.createElement("div");//Crea un div
+    square.classList.add("square");//Assegna la classe square
+    square.style.width = `calc(100% / ${numSquares})`;//Dagli larghezza 100% / numero di quadratini che saranno creati al termine del ciclo
+    square.style.height = square.style.width;//La larghezza è uguale all'altezza (quadrato)
+    return square;//Ritorna il quadratino 
+}
