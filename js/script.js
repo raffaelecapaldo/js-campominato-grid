@@ -49,13 +49,11 @@ function drawSquare(index, numSquares) {
 }
 
 function drawGrid(squareNumbers, squarePerRow, bombs) {//Cicla la creazione degli square in base a quanti ne servono
-    let newArr = [];
     for (let i = 1; i <= squareNumbers; i++) {
         const square = drawSquare(i, squarePerRow);
         if (bombs.includes(parseInt(square.innerText))) {//Se nelle bombe c'è il n segnato dal valore del suo testo
             square.classList.add("boxbomb");//Aggiungi classe specifica alle bombe
             
-            newArr += square;
             square.addEventListener("click", endGame);//Aggiunge l'event listener per le bombe (fine gioco) su ogni quadratino
             
         }
@@ -64,7 +62,6 @@ function drawGrid(squareNumbers, squarePerRow, bombs) {//Cicla la creazione degl
         }
         grid.appendChild(square);//Inserisci il quadratino nella griglia
     }
-        return newArr;
 
 
 }
@@ -99,7 +96,6 @@ function endGame() {
     infoText.append(lost);
     points = 0;//Reset punteggio
     console.log("Hai perso");
-    console.log(newArr);
 }
 
 
