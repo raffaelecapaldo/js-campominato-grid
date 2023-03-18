@@ -92,6 +92,7 @@ function endGame() {
     lost.classList.add("text-danger", "fw-bold", "m-0")
     lost.innerHTML ="Hai perso";
     infoText.append(lost);
+    points = 0;//Reset punteggio
 }
 
 
