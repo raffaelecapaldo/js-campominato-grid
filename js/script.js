@@ -14,20 +14,19 @@ const difficultySelector = document.querySelector("select");
 const grid = document.querySelector(".grid");
 const infoText = document.getElementById("info-text");
 playButton.addEventListener("click", play);
+let points = 0;
 
 
 function play() {
-    infoText.classList.add("d-none");
+    infoText.innerHTML = `<span class="text-success fw-bold">I tuoi punti: 0</span>`;//Aggiungi d-none al testo pre-game
     grid.innerHTML = "";//Svuota griglia se è stata già fatta una partita
     let squareNumbers = setMode(difficultySelector.value);//Prendi info su quanti cicli fare
     let squarePerRow = Math.sqrt(squareNumbers);// Radice quadrata per sapere quanti quadrati inserire per riga
     const NUM_BOMBS = 16;
     const bombs = generateBombs(NUM_BOMBS, squareNumbers);
+    console.log(bombs);
     drawGrid(squareNumbers, squarePerRow, bombs);//Disegna griglia
-
-
 }
-
 
 function setMode(difficulty) {//Imposta difficoltà
     let squareNumbers;
@@ -38,8 +37,6 @@ function setMode(difficulty) {//Imposta difficoltà
             return squareNumbers = 81;
         case "hard":
             return squareNumbers = 49;
-
-
     }
 }
 
@@ -56,44 +53,58 @@ function drawGrid(squareNumbers, squarePerRow, bombs) {//Cicla la creazione degl
     for (let i = 1; i <= squareNumbers; i++) {
         const square = drawSquare(i, squarePerRow);
         if (bombs.includes(parseInt(square.innerText))) {//Se nelle bombe c'è il n segnato dal valore del suo testo
-            square.addEventListener("click", checkBomb);//Aggiunge l'event listener per le bombe su ogni quadratino
+            square.classList.add("boxbomb");//Aggiungi classe specifica alle bombe
+            square.addEventListener("click", endGame);//Aggiunge l'event listener per le bombe (fine gioco) su ogni quadratino
+            
         }
         else {
             square.addEventListener("click", checkSquare);//Altrimenti aggiunge il check normale
- }
-        grid.appendChild(square);
-
-
+        }
+        grid.appendChild(square);//Inserisci il quadratino nella griglia
     }
 
 }
 
 function checkSquare() {
 
-
     this.classList.remove("unchecked");//Toglie unchecked
     this.classList.add("checked");//Mette checked
+    points++;//Aumenta di un punto il punteggio
+    infoText.innerHTML = `<span class="text-success fw-bold">I tuoi punti: ${points}</span>`//Renderizza di nuovo il punteggio
+    console.log(points);
     console.log("Hai cliccato la cella numero: " + this.innerText)//Restituisce in console log il suo n 
 }
 
-function checkBomb() {
-    this.classList.remove("unchecked");//Toglie unchecked
-    this.classList.add("bomb");//Mette checked
-    console.log("Hai cliccato la bomba numero: " + this.innerText)//Restituisce in console log il suo n 
+function endGame() {
+    const boxBombs = document.querySelectorAll(".boxbomb");//Seleziona HTMLCOLLECTION delle bombe dalla loro classe specifica
+    for (box of boxBombs) {//Appena cliccata una bomba tutte le bombe verrano mostrate
+        box.classList.remove("unchecked");
+        box.classList.add("bomb");
+        box.innerHTML = `<img class="minibomb" src="img/mina.webp" alt="">`
+    }
+    const squares = document.querySelectorAll(".square");//Adesso rimuovi tutti gli event listener inseriti in precedenza sugli square
+    for (onesquare of squares) {
+        onesquare.removeEventListener("click", checkSquare);
+        onesquare.removeEventListener("click", endGame);
+
+    }
+    lost = document.createElement("p");//Aggiungi info hai perso 
+    lost.classList.add("text-danger", "fw-bold", "m-0")
+    lost.innerHTML ="Hai perso";
+    infoText.append(lost);
 }
 
 
 
-
-function generateBombs(bombsNum, squareNumbers) {
-    const bombs = [];
-    while (bombs.length < bombsNum) {
-        const bomb = getRndNumber(1, squareNumbers);
-        if (!bombs.includes(bomb)) {
-            bombs.push(bomb);
+function generateBombs(bombsNum, squareNumbers) {//Funzione che genera un array di TOT numeri diversi tra loro
+    const bombs = [];//Dichiara array
+    while (bombs.length < bombsNum) {//Finchè l'array non è composto dal quantitativo di numeri voluto
+        const bomb = getRndNumber(1, squareNumbers);//Genera un numero
+        if (!bombs.includes(bomb)) {//Se non è già presente all'interno dell'array
+            bombs.push(bomb);//Aggiungilo all'array
         }
     }
-    return bombs;
+    return bombs;//Ritorna l'array completo
 }
 
 
