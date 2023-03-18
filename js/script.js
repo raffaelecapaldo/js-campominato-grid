@@ -24,7 +24,6 @@ function play() {
     let squarePerRow = Math.sqrt(squareNumbers);// Radice quadrata per sapere quanti quadrati inserire per riga
     const NUM_BOMBS = 16;
     const bombs = generateBombs(NUM_BOMBS, squareNumbers);
-    console.log(bombs);
     drawGrid(squareNumbers, squarePerRow, bombs);//Disegna griglia
 }
 
@@ -71,7 +70,6 @@ function checkSquare() {
     this.classList.add("checked");//Mette checked
     points++;//Aumenta di un punto il punteggio
     infoText.innerHTML = `<span class="text-success fw-bold">I tuoi punti: ${points}</span>`//Renderizza di nuovo il punteggio
-    console.log(points);
     console.log("Hai cliccato la cella numero: " + this.innerText)//Restituisce in console log il suo n 
 }
 
@@ -93,6 +91,7 @@ function endGame() {
     lost.innerHTML ="Hai perso";
     infoText.append(lost);
     points = 0;//Reset punteggio
+    console.log("Hai perso");
 }
 
 
