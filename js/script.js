@@ -9,15 +9,19 @@ Aggiungere una select accanto al bottone di generazione, che fornisca una scelta
 - con difficoltà 2 => 81 caselle, con un numero compreso tra 1 e 81, divise in 9 caselle per 9 righe;
 - con difficoltà 3 => 49 caselle, con un numero compreso tra 1 e 49, divise in 7 caselle per 7 righe;*/
 
-const playButton = document.getElementById("play-button");
+const playButton = document.getElementById("play-button")
 const difficultySelector = document.querySelector("select");
 const grid = document.querySelector(".grid");
 const infoText = document.getElementById("info-text");
 playButton.addEventListener("click", play);
 let points = 0;
+const goodAudio = new Audio ("effects/good.mp3")
+const endAudio = new Audio ("effects/end.mp3")
+const startAudio = new Audio ("effects/start.mp3");
 
 
 function play() {
+    startAudio.play();
     infoText.innerHTML = `<span class="text-success fw-bold">I tuoi punti: 0</span>`;//Aggiungi d-none al testo pre-game
     grid.innerHTML = "";//Svuota griglia se è stata già fatta una partita
     let squareNumbers = setMode(difficultySelector.value);//Prendi info su quanti cicli fare
@@ -51,8 +55,9 @@ function drawSquare(index, numSquares) {
 function drawGrid(squareNumbers, squarePerRow, bombs) {//Cicla la creazione degli square in base a quanti ne servono
     for (let i = 1; i <= squareNumbers; i++) {
         const square = drawSquare(i, squarePerRow);
+        square.hasMine = false;
         if (bombs.includes(parseInt(square.innerText))) {//Se nelle bombe c'è il n segnato dal valore del suo testo
-            square.classList.add("boxbomb");//Aggiungi classe specifica alle bombe
+            square.hasMine = true;//Cambiato modo di segnalare square con le bombe (con una classe html era troppo facile capire da ispeziona elemento quali fossero le bombe)
             
             square.addEventListener("click", endGame);//Aggiunge l'event listener per le bombe (fine gioco) su ogni quadratino
             
@@ -75,14 +80,18 @@ function checkSquare() {
     points++;//Aumenta di un punto il punteggio
     infoText.innerHTML = `<span class="text-success fw-bold">I tuoi punti: ${points}</span>`//Renderizza di nuovo il punteggio
     console.log("Hai cliccato la cella numero: " + this.innerText)//Restituisce in console log il suo n 
+    goodAudio.play();
 }
 
 function endGame() {
-    const boxBombs = document.querySelectorAll(".boxbomb");//Seleziona HTMLCOLLECTION delle bombe dalla loro classe specifica
-    for (box of boxBombs) {//Appena cliccata una bomba tutte le bombe verrano mostrate
+    const squaresBox = document.querySelectorAll(".square");//Seleziona HTMLCOLLECTION delle bombe dalla loro classe specifica
+    for (box of squaresBox) {//Appena cliccata una bomba itera i quadrati
+        if (box.hasMine) {//Se hanno una mina, aggiungi la classe relativa
         box.classList.remove("unchecked");
         box.classList.add("bomb");
         box.innerHTML = `<img class="minibomb" src="img/mina.webp" alt="">`
+        }
+        
     }
     const squares = document.querySelectorAll(".square");//Adesso rimuovi tutti gli event listener inseriti in precedenza sugli square
     for (onesquare of squares) {
@@ -92,10 +101,11 @@ function endGame() {
     }
     lost = document.createElement("p");//Aggiungi info hai perso 
     lost.classList.add("text-danger", "fw-bold", "m-0")
-    lost.innerHTML ="Hai perso";
+    lost.innerHTML =`Hai perso, riprova.`;
     infoText.append(lost);
     points = 0;//Reset punteggio
     console.log("Hai perso");
+    endAudio.play();
 }
 
 
