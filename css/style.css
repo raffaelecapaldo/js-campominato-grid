@@ -83,4 +83,9 @@ footer {
         width: 100px;
 
     }
+
+    .minibomb{
+        width: 100%;
+        height: 100%;
+    }
 }
